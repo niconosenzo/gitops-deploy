@@ -21,7 +21,7 @@ pipeline {
                         openshift.withProject("${env.PRJ}") {
                             echo('Grant to developer read access to the project')
                             openshift.raw('policy', 'add-role-to-user', 'view', 'developer')
-                            echo("Create app ${env.APP}") 
+                            echo("Create VERSIOM 2 app ${env.APP}") 
                             openshift.newApp("${env.GIT_URL}#${env.BRANCH_NAME}", "--strategy source", "--name ${env.APP}")
                         }
                     }
@@ -34,7 +34,7 @@ pipeline {
                     openshift.withCluster() {
                         openshift.withProject("${env.PRJ}") {
                             def bc = openshift.selector('bc', "${env.APP}")
-                            echo("Wait for build from bc ${env.APP} to finish") 
+                            echo("Wait for build VERSION 2 from bc ${env.APP} to finish") 
                             timeout(5) {
                                 def builds = bc.related('builds').untilEach(1) {
                                     def phase = it.object().status.phase
@@ -70,7 +70,7 @@ pipeline {
         }
         stage('test') {
             input {
-                message 'About to test the application'
+                message 'About to test the application VERSION 2'
                 ok 'Ok'
             }
             steps {
